@@ -1,0 +1,28 @@
+{
+  "config": {
+    "target" : "http://localhost:8001",
+    "phases" : [
+      {
+        "duraction" : 60,
+        "arrivalRate": 30
+      }
+    ]
+  },
+  "scenarios" : [{
+    "flow" : [
+      {
+        "get" : {
+          "url" : "/auth/login",
+          "json" : {
+            "email" : "jana97@naver.com",
+            "password": "qu459697"
+          }
+        }
+      }, {
+        "get" : {
+          "url" : "/hashtag?hashtag=nodebird"
+        }
+      }
+    ]
+  }]
+}

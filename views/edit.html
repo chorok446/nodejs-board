@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="timeline">
+  <form id="edit-form" action="/auth/edit" method="post">
+    <div class="input-group">
+      <label for="edit-email">이메일</label>
+      <input id="edit-email" type="email" name="email"></div>
+    <div class="input-group">
+      <label for="edit-nick">닉네임</label>
+      <input id="edit-nick" type="text" name="nick"></div>
+    <div class="input-group">
+      <label for="edit-password">비밀번호</label>
+      <input id="edit-password" type="password" name="password">
+    </div>
+    <button id="edit_btn" type="submit" class="btn">프로필 수정</button>
+  </form>
+  <button id="withdraw" href="/auth/withdraw" class="btn" style="margin-top: 20px">회원탈퇴</button>
+</div>
+<script>
+  document.querySelectorAll('#withdraw').forEach(function(tag){
+    tag.addEventListener('click', function() {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        if (confirm('탈퇴하시겠습니까?')) {
+          axios.post(`/auth/withdraw` )
+                  .then(() => {
+                    location.reload();
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
+        }
+      }
+    })
+  });
+</script>
+
+
+{% endblock %}
