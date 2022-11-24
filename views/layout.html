@@ -14,6 +14,9 @@
         <div class="profile">
             {% if user and user.id %}
             <div class="user-name">{{'안녕하세요! ' + user.nick + '님'}}</div>
+            <div class="userz">
+            <div class="profile-img"><img src="{{user.profile}}" alt="섬네일"></div>
+            </div>
             <div class="half">
                 <div>팔로잉</div>
                 <div class="count following-count">{{followingCount}}</div>
@@ -23,10 +26,10 @@
                 <div class="count follower-count">{{followerCount}}</div>
             </div>
             <input id="my-id" type="hidden" value="{{user.id}}">
-            <a id="my-profile" href="/profile" class="btn">내 팔로잉</a>
-            <a id="profile-edit" href="/edit" class="btn">프로필 수정</a>
-            <a id="logout" href="/auth/logout" class="btn">로그아웃</a>
-            <a id="home" href="/" class="btn" style="margin-top:10px ">홈으로</a>
+            <a id="my-profile" href="/mypage" class="btn">마이 페이지</a>
+            <a id="profile-edit" href="/edit" class="btn">회원정보수정</a>
+            <a id="home" href="/" class="btn" >홈</a>
+            <a id="logout" href="/auth/logout" style="margin-top:20px; margin-left: 5px "class="btn" >로그아웃</a>
             {% else %}
             <form id="login-form" action="/auth/login" method="post">
                 <div class="input-group">
@@ -39,7 +42,10 @@
                 </div>
                 <a id="join" href="/join" class="btn">회원가입</a>
                 <button id="login" type="submit" class="btn">로그인</button>
-                <a id="kakao" href="/auth/kakao" class="btn">카카오톡</a>
+                <a id="kakao" href="/auth/kakao" class="btn" >카카오톡</a>
+                <a id="naver" href="/auth/naver" class="btn" style="margin-top: 10px">네이버</a>
+                <a id="google" href="/auth/google" class="btn" style="margin-top: 10px">구글</a>
+
             </form>
             {% endif %}
         </div>

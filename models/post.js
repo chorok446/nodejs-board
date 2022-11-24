@@ -18,7 +18,7 @@ module.exports = class Post extends Sequelize.Model {
                     key: "id",
                 },
                 onDelete: "CASCADE",
-            }
+            },
         }, {
             sequelize,
             timestamps: true,
@@ -37,9 +37,5 @@ module.exports = class Post extends Sequelize.Model {
             onDelete: 'CASCADE'
         });
         db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag' });
-        db.Post.belongsToMany(db.User, {
-            foreignKey: 'likedId',
-            through: 'Like',
-        });
     }
 };

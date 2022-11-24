@@ -21,8 +21,10 @@
     "mysql2": "^2.3.3",
     "nunjucks": "^3.2.3",
     "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
     "passport-kakao": "^1.0.1",
     "passport-local": "^1.0.0",
+    "passport-naver-v2": "^2.0.8",
     "sequelize": "^6.25.5",
     "sequelize-cli": "^6.5.2"
   },

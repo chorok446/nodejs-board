@@ -62,7 +62,7 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
 
 router.post(`/:twit/delete`, isLoggedIn, async(req, res, next) => {
     try {
-        const twit = await Post.findOne({where: {userId: req.params.twit}});
+        const twit = await Post.findOne({where: {id: req.params.twit}});
         if (twit) {
             await twit.destroy();
             res.send('success');
