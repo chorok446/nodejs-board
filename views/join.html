@@ -2,26 +2,31 @@
 
 {% block content %}
 <div class="timeline">
-  <form id="join-form" action="/auth/join" method="post" enctype="multipart/form-data">
+  <form id="join-form" name="joinform" action="/auth/join" method="post" enctype="multipart/form-data">
     <div class="input-group">
       <label for="join-email">이메일</label>
       <input id="join-email" type="email" name="email"></div>
     <div class="input-group">
+      <label for="join-password">비밀번호</label>
+      <input id="join-password" type="password" name="password" placeholder="영문자+숫자+특수문자 조합 8자리 이상">
+    </div>
+    <div class="input-group">
+      <label for="join-repassword">비밀번호재확인</label>
+      <input id="join-repassword" type="password" name="repassword">
+    </div>
+    <div class="input-group">
       <label for="join-nick">닉네임</label>
       <input id="join-nick" type="text" name="nick"></div>
-    <div class="input-group">
-      <label for="join-password">비밀번호</label>
-      <input id="join-password" type="password" name="password">
-    </div>
     <div class="avata-preview">
       <img id="avata-preview" src="" style="display: none;" width="250" alt="미리보기">
       <input id="avata-url" type="hidden" name="url">
     </div>
-    <div>
+    <div class="input-group">
       <label id="avata-label" for="avata">프로필 사진 업로드</label>
       <input id="avata" type="file" accept="image/*">
     </div>
-    <button id="join-btn" type="submit" class="btn">회원가입</button>
+    <button type="button" onclick="history.back();" class="btn">이전페이지로 돌아가기</button>
+    <button id="join-btn" type="button" onclick="joinform_check();" class="btn">회원가입</button>
   </form>
 </div>
 {% endblock %}
@@ -51,6 +56,48 @@
             alert('이미 존재하는 이메일입니다.');
         }
     };
+    //joinform_check 함수로 유효성 검사
+    function joinform_check() {
+        //변수에 담아주기
+        const email = document.getElementById("join-email");
+        const password = document.getElementById("join-password");
+        const repassword = document.getElementById("join-repassword");
+        const nick = document.getElementById("join-nick");
 
+        if (email.value === "") { //해당 입력값이 없을 경우 같은말: if(!uid.value)
+            alert("이메일을 입력하세요.");
+            email.focus(); //focus(): 커서가 깜빡이는 현상, blur(): 커서가 사라지는 현상
+            return false; //return: 반환하다 return false:  아무것도 반환하지 말아라 아래 코드부터 아무것도 진행하지 말것
+        }
+
+        if (password.value === "") {
+            alert("비밀번호를 입력하세요.");
+            password.focus();
+            return false;
+        }
+
+        if (nick.value === "") {
+            alert("닉네임을 입력하세요.");
+            nick.focus();
+            return false;
+        }
+
+        //비밀번호 영문자+숫자+특수조합(8~25자리 입력) 정규식
+        const passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+
+        if (!passwordCheck.test(password.value)) {
+            alert("비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리 사용해야 합니다.");
+            password.focus();
+            return false;
+        }
+
+        if (repassword.value !== password.value) {
+            alert("비밀번호가 일치하지 않습니다..");
+            repassword.focus();
+            return false;
+        }
+        //입력 값 전송
+        document.joinform.submit(); //유효성 검사의 포인트
+    }
 </script>
 {% endblock %}

@@ -2,22 +2,32 @@
 
 {% block content %}
 <div class="timeline">
-  <form id="edit-form" action="/auth/edit" method="post">
+  <form id="edit-form" name="editform" action="/auth/edit" method="post">
     {% if user and user.provider === 'local' %}
     <div class="input-group">
       <label for="edit-password">비밀번호</label>
-      <input id="edit-password" type="password" name="password">
+      <input id="edit-password" type="password" name="password" placeholder="영문자+숫자+특수문자 조합 8자리 이상">
+    </div>
+    <div class="input-group">
+      <label for="edit-repassword">비밀번호재확인</label>
+      <input id="edit-repassword" type="password" name="repassword">
     </div>
     {% endif %}
+    {% if user and user.provider !== 'local' %}
     <p>로컬계정이 아니면 닉네임 변경만 가능합니다.</p>
+    {% endif %}
     <div class="input-group">
       <label for="edit-nick">닉네임</label>
       <input id="edit-nick" type="text" name="nick"></div>
-    <button id="edit_btn" type="submit" class="btn">프로필 수정 제출</button>
+    <button type="button" onclick="history.back();" class="btn">이전페이지로 돌아가기</button>
+    <button id="edit_btn" type="button" onclick="editform_check();" class="btn">확인</button>
   </form>
-  <a id="edit_avata_btn" href="/avata" class="btn">프로필 사진 변경</a>
   <button id="withdraw" href="/auth/withdraw" class="btn" style="margin-top: 10px">회원탈퇴</button>
 </div>
+{% endblock %}
+
+
+{% block script %}
 <script>
   document.querySelectorAll('#withdraw').forEach(function(tag){
     tag.addEventListener('click', function() {
@@ -35,7 +45,43 @@
       }
     })
   });
+
+  function editform_check() {
+      //변수에 담아주기
+      const email = document.getElementById("edit-email");
+      const password = document.getElementById("edit-password");
+      const repassword = document.getElementById("edit-repassword");
+      const nick = document.getElementById("edit-nick");
+      const user = "{{user}}";
+
+      if (user.provider === 'local') {
+          if (password.value === "") {
+              alert("비밀번호를 입력하세요.");
+              password.focus();
+              return false;
+          }
+          //비밀번호 영문자+숫자+특수조합(8~25자리 입력) 정규식
+          const passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+
+          if (!passwordCheck.test(password.value)) {
+              alert("비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리 사용해야 합니다.");
+              password.focus();
+              return false;
+          }
+          if (repassword.value !== password.value) {
+              alert("비밀번호가 일치하지 않습니다..");
+              repassword.focus();
+              return false;
+          }
+      }
+
+      if (nick.value === "") {
+          alert("닉네임을 입력하세요.");
+          nick.focus();
+          return false;
+      }
+      //입력 값 전송
+      document.editform.submit(); //유효성 검사의 포인트
+  }
 </script>
-
-
 {% endblock %}

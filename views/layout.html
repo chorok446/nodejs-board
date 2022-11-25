@@ -12,10 +12,12 @@
 <div class="container">
   <div class="profile-wrap">
     <div class="profile">
+      <a id="home" href="/" class="btn" >홈으로</a>
       {% if user and user.id %}
       <div class="user-name">{{'안녕하세요! ' + user.nick + '님'}}</div>
       <div class="userz">
         <div class="profile-img"><img src="{{user.profile}}" alt="섬네일"></div>
+        <a id="edit_avata_btn" href="/avata" class="btn" style="margin-top: 10px">프로필사진 변경</a>
       </div>
       <div class="half">
         <div>팔로잉</div>
@@ -28,7 +30,6 @@
       <input id="my-id" type="hidden" value="{{user.id}}">
       <a id="my-profile" href="/mypage" class="btn">마이 페이지</a>
       <a id="profile-edit" href="/edit" class="btn">회원정보수정</a>
-      <a id="home" href="/" class="btn" >홈</a>
       <a id="logout" href="/auth/logout" style="margin-top:20px; margin-left: 5px " class="btn" >로그아웃</a>
       {% else %}
       <form id="login-form" action="/auth/login" method="post">
