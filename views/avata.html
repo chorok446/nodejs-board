@@ -16,6 +16,10 @@
     </div>
   </form>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
     if (document.getElementById('avata-edit')) {
         document.getElementById('avata-edit').addEventListener('change', function(e) {
@@ -34,6 +38,4 @@
         });
     }
 </script>
-
-
 {% endblock %}

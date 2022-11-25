@@ -35,11 +35,6 @@ router.post('/avata', isNotLoggedIn, upload.single('avata'), (req, res) => {
     console.log(req.file);
     res.json({ url: `/avata/${req.file.filename}` });
 });
-
-router.post('/avata-edit', isLoggedIn, upload.single('avata-edit'), (req, res) => {
-    res.json({ url: `/avata/${req.file.filename}` });
-});
-
 const upload2 = multer();
 router.post('/join', isNotLoggedIn, upload2.none(), async (req, res, next) => {
     const { email, nick, password, } = req.body;
@@ -100,11 +95,20 @@ router.post('/edit', isLoggedIn, async (req, res, next) => {
     }
 });
 
+router.post('/avata-edit', isLoggedIn, upload.single('avata-edit'), (req, res, next) => {
+    console.log(req.file);
+    res.json({ url: `/avata-edit/${req.file.filename}`});
+    global.edit = `/avata/${req.file.filename}`;
+});
+
+
 router.post('/editavata', isLoggedIn, async(req, res, next) => {
-    const id = req.user.id
     try {
+        console.log(`userid: ${req.user.id}`);
+        console.log(`edit, type : ${typeof(edit)}, value: ${edit}`);
+        const id = req.user.id
         await User.update({
-            profile: req.body.url,
+            profile: edit,
         }, {where: { id }});
         return res.redirect('/')
     } catch (error) {

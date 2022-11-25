@@ -28,15 +28,16 @@ router.get('/edit', isLoggedIn, async(req, res, next) => {
     try {
         exUser = await User.findOne({where: req.user.id});
         if(exUser.provider === "local"){
-            res.render('edit', { title : ' 프로필수정'});
+            res.render('edit', { title : '프로필수정 - NodeBird'});
         } else {
-            return res.redirect(`/?loginError=소셜계정은 정보변경이 불가능합니다.`);
+            res.redirect('/avata');
         }
     } catch (error) {
         console.error(error);
         next(error)
     }
 })
+
 
 router.get('/avata', isLoggedIn, async(req, res, next) => {
     res.render('avata', {title: '프로필사진 변경 - NodeBird'})
