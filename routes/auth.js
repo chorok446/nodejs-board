@@ -80,14 +80,21 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
 
 
 router.post('/edit', isLoggedIn, async (req, res, next) => {
-    const { email, nick, password } = req.body;
+    const { nick, password } = req.body;
     const id = req.user.id
     try {
+        if (req.user.provider === 'local') {
             const hash = await bcrypt.hash(password, 12);
             await User.update({
                 nick: nick,
                 password: hash,
             }, {where: {id}});
+        } else {
+            res.locals.message = '로컬계정이 아니면 비밀번호 변경이 불가능합니다.';
+            await User.update({
+                nick: nick,
+            }, {where: {id}});
+        }
         return res.redirect('/');
     } catch (error) {
         console.error(error);

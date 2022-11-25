@@ -34,7 +34,7 @@ module.exports = class User extends Sequelize.Model {
             profile : {
                 type: Sequelize.STRING(200),
                 allowNull: true,
-                defaultValue: 'avata/default.jpg',
+                defaultValue: '/avata/default.jpg',
             }
         }, {
             sequelize,

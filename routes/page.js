@@ -27,11 +27,11 @@ router.get('/join', isNotLoggedIn, (req, res) => {
 router.get('/edit', isLoggedIn, async(req, res, next) => {
     try {
         exUser = await User.findOne({where: req.user.id});
-        if(exUser.provider === "local"){
+        //if(exUser.provider === "local"){
             res.render('edit', { title : '프로필수정 - NodeBird'});
-        } else {
-            res.redirect('/avata');
-        }
+        //} else {
+            //res.redirect('/avata');
+        //}
     } catch (error) {
         console.error(error);
         next(error)
