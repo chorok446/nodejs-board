@@ -54,7 +54,7 @@
             <input placeholder="댓글을 작성해보세요" name="reply" id="reply" maxlength="40"></input>
           </div>
           <div>
-            <button id="reply-btn" type="button" onclick="commenttypecheck()" class="btn">댓글쓰기</button>
+            <button id="reply-btn" type="submit"  class="btn">댓글쓰기</button>
           </div>
           </form>
       </div>
@@ -162,17 +162,6 @@
         }
 
         document.twitform.submit();
-    }
-
-    function commenttypecheck() {
-        const comment = document.getElementById('reply');
-
-        if(comment.value === ""){
-            alert("댓글을 입력해주세요.");
-            comment.focus();
-            return false;
-        }
-        document.replyform.submit();
     }
 </script>
 {% endblock %}
