@@ -4,7 +4,7 @@
 <div class="timeline">
   {% if user %}
   <div>
-    <form id="twit-form" action="/post" method="post" enctype="multipart/form-data">
+    <form id="twit-form" name="twitform" action="/post" method="post" enctype="multipart/form-data">
       <div class="input-group">
         <textarea id="twit" name="content" maxlength="140"></textarea>
       </div>
@@ -15,7 +15,7 @@
       <div>
         <label id="img-label" for="img">사진 업로드</label>
         <input id="img" type="file" accept="image/*">
-        <button id="twit-btn" type="submit" class="btn">글쓰기</button>
+        <button id="twit-btn" type="button" onclick="boardtypecheck()" class="btn">글쓰기</button>
       </div>
     </form>
   </div>
@@ -31,7 +31,7 @@
     <div class="twit">
       <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
       <input type="hidden" value="{{twit.id}}" class="twit-id">
-      <img type="hidden" src="{{twit.User.profile}}" class="user-avata" style="width: 50px; height: 50px">
+      <img alt="유저프로필"  src="{{twit.User.profile}}" class="user-avata" >
       <div class="twit-author">{{twit.User.nick}}</div>
       {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
       <button class="twit-follow">팔로우</button>
@@ -46,6 +46,29 @@
       {% if twit.img %}
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
+      <div>
+        <form id="reply-form" name="replyform" action="/post/comment" method="post">
+          <input type="hidden" value="{{twit.id}}" name="twitid" class="twit-id">
+          <div class="input-group">
+            <label for="reply">댓글</label>
+            <input placeholder="댓글을 작성해보세요" name="reply" id="reply" maxlength="40"></input>
+          </div>
+          <div>
+            <button id="reply-btn" type="button" onclick="commenttypecheck()" class="btn">댓글쓰기</button>
+          </div>
+          </form>
+      </div>
+      {% for reply in replys %}
+      {% if reply.twitId === twit.id %}
+      <div class="reply" >
+        <input type="hidden" value="{{reply.User.id}}" class="reply-user-id">
+        <input type="hidden" value="{{reply.id}}" class="reply-id">
+        <img alt="유저프로필" src="{{reply.User.profile}}" class="user-avata" >
+        <div class="reply-author">{{reply.User.nick}}</div>
+        <div class="reply-content">{{reply.content}}</div>
+      </div>
+      {% endif %}
+      {% endfor %}
     </div>
     {% endfor %}
   </div>
@@ -128,5 +151,28 @@
             }
         })
     });
+
+    function boardtypecheck() {
+        const content = document.getElementById('twit')
+
+        if(content.value === ""){
+            alert("게시글을 입력해주세요.");
+            content.focus();
+            return false;
+        }
+
+        document.twitform.submit();
+    }
+
+    function commenttypecheck() {
+        const comment = document.getElementById('reply');
+
+        if(comment.value === ""){
+            alert("댓글을 입력해주세요.");
+            comment.focus();
+            return false;
+        }
+        document.replyform.submit();
+    }
 </script>
 {% endblock %}

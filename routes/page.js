@@ -1,6 +1,6 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const { Post, User, Hashtag } = require('../models');
+const { Post, User, Hashtag, Comment } = require('../models');
 const {where} = require("sequelize");
 
 const router = express.Router();
@@ -53,10 +53,18 @@ router.get('/', async (req, res, next) => {
             },
             order: [['createdAt', 'DESC']],
         });
+        const comments = await Comment.findAll({
+            include: {
+                model: User,
+                attributes: ['id', 'nick', 'profile'],
+            },
+            order: [['createdAt', 'DESC']],
+        });
         if(req.user){
             res.render('main', {
                 title: 'NodeBird',
                 twits: posts,
+                replys: comments,
             });
         } else {
             res.render('main', {

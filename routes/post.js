@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag } = require('../models');
+const { Post, Hashtag, Comment } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 const User = require("../models/user");
 
@@ -59,6 +59,21 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
         next(error);
     }
 });
+
+router.post('/comment', isLoggedIn, async(req, res, next) => {
+    try{
+        console.log(req.body)
+        const comment = await Comment.create( {
+            content: req.body.reply,
+            twitId: req.body.twitid,
+            userId: req.user.id,
+        })
+        res.redirect('/');
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+})
 
 router.post(`/:twit/delete`, isLoggedIn, async(req, res, next) => {
     try {

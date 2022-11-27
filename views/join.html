@@ -126,7 +126,7 @@
         const passwordcontainer = document.getElementById("join-password-container");
         const passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
 
-        if (!passwordCheck.test(password.value)) {
+        if (password.value !== "" && !passwordCheck.test(password.value)) {
             div.id = 'join-passwordtype-error';
             div.className = 'join-error';
             passwordcontainer.appendChild(div);

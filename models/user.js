@@ -70,5 +70,8 @@ module.exports = class User extends Sequelize.Model {
             through: 'Like',
         });
          */
+        db.User.hasMany(db.Comment, {
+            foreignKey: 'userId',
+        });
     }
 };
