@@ -11,9 +11,9 @@ describe('POST /join', () => {
         request(app)
             .post('/auth/join')
             .send({
-                email: "jana97@naver.com",
+                email: "example@naver.com",
                 nick: '정동원',
-                password: 'qu459697',
+                password: 'abc12345678-',
             })
             .expect('Location', '/')
             .expect(302, done)
@@ -26,8 +26,8 @@ describe('POST /join', () => {
         agent
             .post('/auth/login')
             .send({
-                email: "jana97@naver.com",
-                password: "qu459697",
+                email: "example@naver.com",
+                password: "abcd12345678-",
             })
             .end(done);
     });
@@ -41,7 +41,7 @@ describe('POST /join', () => {
             .send({
                 email: "jana97@naver.com",
                 nick: '정동원',
-                password: 'qu459697',
+                password: 'abcd12345678-',
             })
             .expect('Location', `/?error=${message}`)
             .expect(302, done);
@@ -55,7 +55,7 @@ describe('POST /login', () => {
             .post('/auth/login')
             .send({
                 email: 'wrongid@gmail.com',
-                password: "qu459697",
+                password: "abcd12345667-",
             })
             .expect('Location', `/?loginError=${message}`)
             .expect(302, done);
@@ -65,8 +65,8 @@ describe('POST /login', () => {
             request(app)
                 .post('/auth/login')
                 .send({
-                    email: 'jana97@naver.com',
-                    password: 'qu459697',
+                    email: 'exmaple@naver.com',
+                    password: 'abcd12345678',
                 })
                 .expect('Location', '/')
                 .expect(302, done);
@@ -109,7 +109,7 @@ describe('GET /logout', () => {
             .post('/auth/login')
             .send({
                 email:"jana97@naver.com",
-                password: "qu459697",
+                password: "abcd1234566788-",
             })
             .end(done);
     })
