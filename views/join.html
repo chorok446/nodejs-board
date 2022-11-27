@@ -3,20 +3,22 @@
 {% block content %}
 <div class="timeline">
   <form id="join-form" name="joinform" action="/auth/join" method="post" enctype="multipart/form-data">
-    <div class="input-group">
+    <div class="input-group" id="join-email-container">
       <label for="join-email">이메일</label>
-      <input id="join-email" type="email" name="email"></div>
-    <div class="input-group">
+      <input id="join-email" type="email" name="email" onblur="emailtypecheck()">
+    </div>
+
+    <div class="input-group" id="join-password-container">
       <label for="join-password">비밀번호</label>
-      <input id="join-password" type="password" name="password" placeholder="영문자+숫자+특수문자 조합 8자리 이상">
+      <input id="join-password" type="password" name="password" placeholder="영문자+숫자+특수문자 조합 8자리 이상" onblur="passwordtypecheck()">
     </div>
-    <div class="input-group">
-      <label for="join-repassword">비밀번호재확인</label>
-      <input id="join-repassword" type="password" name="repassword">
+    <div class="input-group" id="join-repassword-container">
+      <label for="join-repassword">비밀번호확인</label>
+      <input id="join-repassword" type="password" name="repassword" onblur="repasswordtypecheck()">
     </div>
-    <div class="input-group">
+    <div class="input-group" id="join-nick-container">
       <label for="join-nick">닉네임</label>
-      <input id="join-nick" type="text" name="nick"></div>
+      <input id="join-nick" type="text" name="nick" onblur="nicktypecheck()"></div>
     <div class="avata-preview">
       <img id="avata-preview" src="" style="display: none;" width="250" alt="미리보기">
       <input id="avata-url" type="hidden" name="url">
@@ -99,5 +101,95 @@
         //입력 값 전송
         document.joinform.submit(); //유효성 검사의 포인트
     }
+
+    const emailtypecheck = () => {
+        const email = document.getElementById("join-email");
+        const div = document.createElement("div");
+        const emailcontainer = document.getElementById("join-email-container");
+
+        if (!email.value.includes('@')) { // @ 유무를 이용해 유효한 이메일 주소가 아닌지 체크
+            email.classList.add('inval');
+            div.id = 'join-email-error';
+            emailcontainer.appendChild(div);
+            const error = document.getElementById("join-email-error");
+            error.innerHTML = '올바른 이메일 주소를 입력하세요.'
+        } else {
+            email.classList.remove('inval');
+            const error = document.getElementById("join-email-error")
+            error.innerHTML = "";
+        }
+    }
+
+    const passwordtypecheck = () => {
+        const password = document.getElementById("join-password");
+        const div = document.createElement("div");
+        const passwordcontainer = document.getElementById("join-password-container");
+        const passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+
+        if (!passwordCheck.test(password.value)) {
+            div.id = 'join-passwordtype-error';
+            div.className = 'join-error';
+            passwordcontainer.appendChild(div);
+            const error = document.getElementById('join-passwordtype-error');
+            error.innerHTML = '비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리로 사용해야 합니다.'
+        } else {
+            password.classList.remove('inval');
+            const error = document.getElementById("join-passwordtype-error")
+            error.innerHTML = "";
+        }
+
+        if (password.value === "") {
+            password.classList.add('inval');
+            div.id = 'join-password-error';
+            div.className = 'join-error';
+            passwordcontainer.appendChild(div);
+            const error = document.getElementById('join-password-error');
+            error.innerHTML = '비밀번호를 입력해주세요.'
+        } else {
+            password.classList.remove('inval');
+            const error = document.getElementById("join-password-error")
+            error.innerHTML = "";
+        }
+    }
+
+    const repasswordtypecheck = () => {
+        const password = document.getElementById("join-password");
+        const repassword = document.getElementById("join-repassword");
+        const div = document.createElement("div");
+        const repasswordcontainer = document.getElementById("join-repassword-container");
+        if (password.value !== repassword.value) {
+            repassword.classList.add('inval');
+            div.id = 'join-repassword-error';
+            div.className = 'join-error';
+            repasswordcontainer.appendChild(div);
+            const error = document.getElementById('join-repassword-error');
+            error.innerHTML = '비밀번호가 일치하지않습니다.'
+        } else {
+                repassword.classList.remove('inval');
+            const error = document.getElementById("join-repassword-error")
+            error.innerHTML = "";
+        }
+    }
+
+    const nicktypecheck = () => {
+        const nick = document.getElementById("join-nick");
+        const div = document.createElement("div");
+        const nickcontainer = document.getElementById("join-nick-container");
+
+        if (nick.value === "") {
+            nick.classList.add('inval');
+            div.id = 'join-nick-error';
+            div.className = 'join-error';
+            nickcontainer.appendChild(div);
+            const error = document.getElementById('join-nick-error');
+            error.innerHTML = '닉네임을 입력해주세요.'
+        } else {
+            nick.classList.remove('inval');
+            const error = document.getElementById("join-nick-error")
+            error.innerHTML = "";
+        }
+    }
+
+
 </script>
 {% endblock %}

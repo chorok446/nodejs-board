@@ -126,6 +126,7 @@ footer { text-align: center; }
 
 .followings, .followers{
     border: 5px groove #3F51b5;
-    margin-
 }
 
+.inval { border-color: red; }
+#join-email-error, .join-error { color: red }
