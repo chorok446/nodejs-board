@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 <head>
   <meta charset="UTF-8">
   <title>{{title}}</title>
@@ -16,8 +16,9 @@
       {% if user and user.id %}
       <div class="user-name">{{'안녕하세요! ' + user.nick + '님'}}</div>
       <div class="userz">
-        <div class="profile-img"><img src="{{user.profile}}" alt="섬네일"></div>
-        <a id="edit_avata_btn" href="/avata" class="btn" style="margin-top: 10px">프로필사진 변경</a>
+        <div class="profile-img">
+          <a id="edit_avata_btn" href="/avata"><img src="{{user.profile}}" alt="프로필이미지" style="cursor: pointer;"></a>
+        </div>
       </div>
       <div class="half">
         <div>팔로잉</div>

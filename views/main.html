@@ -31,7 +31,8 @@
     <div class="twit">
       <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
       <input type="hidden" value="{{twit.id}}" class="twit-id">
-      <img type="hidden" src="{{twit.User.profile}}" class="user-avata" style="width: 50px; height: 50px">
+      <a id="avata_btn" href="{{twit.User.profile}}" target="_blank">
+        <img alt="프로필" src="{{twit.User.profile}}" class="user-avata" style="width: 50px; height: 50px; cursor: pointer;" ></a>
       <div class="twit-author">{{twit.User.nick}}</div>
       {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
       <button class="twit-follow">팔로우</button>
