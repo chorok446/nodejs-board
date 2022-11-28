@@ -58,7 +58,7 @@ router.get('/', async (req, res, next) => {
                 model: User,
                 attributes: ['id', 'nick', 'profile'],
             },
-            order: [['createdAt', 'DESC']],
+            order: [['createdAt', 'ASC']],
         });
         if(req.user){
             res.render('main', {

@@ -38,6 +38,7 @@ router.post('/avata', isNotLoggedIn, upload.single('avata'), (req, res) => {
 const upload2 = multer();
 router.post('/join', isNotLoggedIn, upload2.none(), async (req, res, next) => {
     const { email, nick, password, } = req.body;
+    console.log(req.body)
     try {
         const exUser = await User.findOne({ where: { email } });
         if (exUser) {
