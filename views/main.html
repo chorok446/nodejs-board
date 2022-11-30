@@ -56,9 +56,12 @@
         <div class="box" style="margin-top: 10px;">
         <img alt="유저프로필" src="{{reply.User.profile}}" class="form-avata"  >
         </div>
-        <div class="reply-author">댓글 작성자: {{reply.User.nick}}</div>
-        <div class="reply-content">댓글 내용: {{reply.content}}</div>
-        <div class="reply-time">댓글 작성시간: {{reply.updatedAt}}</div>
+        <div id="reply-author">댓글 작성자: {{reply.User.nick}}</div>
+        <div id="reply-content">댓글 내용: {{reply.content}}</div>
+        <div id="reply-time"></div>
+        {% if reply.User.id == user.id %}
+        <div id="reply-delete-btn" class="btn">댓글삭제</div>
+        {% endif %}
       </div>
       {% endif %}
       {% endfor %}
@@ -145,7 +148,7 @@
                 const twitId = tag.parentNode.querySelector('.twit-id').value;
                 if (userId === myId.value) {
                     if (confirm('삭제하시겠습니까?')) {
-                        axios.post(`/post/${twitId}/delete` )
+                        axios.post(`/post/twit/${twitId}/delete` )
                             .then(() => {
                                 location.reload();
                             })
@@ -158,16 +161,25 @@
         })
     });
 
-    function boardtypecheck() {
-        const content = document.getElementById('twit')
-
-        if(content.value === ""){
-            alert("게시글을 입력해주세요.");
-            content.focus();
-            return false;
-        }
-
-        document.twitform.submit();
-    }
+    document.querySelectorAll('#reply-delete-btn').forEach(function(tag){
+        tag.addEventListener('click', function() {
+            const myId = document.querySelector('#my-id');
+            if (myId) {
+                const userId = tag.parentNode.querySelector('.reply-user-id').value;
+                const replyId = tag.parentNode.querySelector('.reply-id').value;
+                if (userId === myId.value) {
+                    if (confirm('삭제하시겠습니까?')) {
+                        axios.post(`/post/comment/${replyId}/delete` )
+                            .then(() => {
+                                location.reload();
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                            });
+                    }
+                }
+            }
+        })
+    });
 </script>
 {% endblock %}

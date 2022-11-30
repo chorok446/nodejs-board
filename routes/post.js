@@ -75,14 +75,29 @@ router.post('/comment', isLoggedIn, async(req, res, next) => {
     }
 })
 
-router.post(`/:twit/delete`, isLoggedIn, async(req, res, next) => {
+router.post(`/twit/:twit/delete`, isLoggedIn, async(req, res, next) => {
     try {
         const twit = await Post.findOne({where: {id: req.params.twit}});
         if (twit) {
             await twit.destroy();
             res.send('success');
         } else {
-            res.status(404).send('지우려는 게시물이 존재하지 않습니다.');
+            res.status(404).send('삭제하려는 댓글이 존재하지 않습니다.');
+        }
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+})
+
+router.post(`/comment/:comment/delete`, isLoggedIn, async(req, res, next) => {
+    try {
+        const comment = await Comment.findOne({where: {id: req.params.comment}});
+        if (comment) {
+            await comment.destroy();
+            res.send('success');
+        } else {
+            res.status(404).send('삭제하려는 댓글이 존재하지 않습니다.');
         }
     } catch (error) {
         console.error(error);
