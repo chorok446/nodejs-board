@@ -122,9 +122,10 @@ dist
 /public/kakao.jpg
 .idea/
 .vscode/
-.test.js
-.test.ts
+*.test.js
+*.test.ts
 /.gitignore
-/routes/auth.test.js
-/routes/middlewares.test.js
+/test/auth.test.js
+/test/middlewares.test.js
 /loadtest.json
+/test/
