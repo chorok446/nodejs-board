@@ -121,3 +121,10 @@ dist
 /profiles/
 /public/kakao.jpg
 .idea/
+.vscode/
+.test.js
+.test.ts
+/.gitignore
+/routes/auth.test.js
+/routes/middlewares.test.js
+/loadtest.json

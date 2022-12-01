@@ -15,7 +15,7 @@
           "url" : "/auth/login",
           "json" : {
             "email" : "jana97@naver.com",
-            "password": "qu459697"
+            "password": "123456"
           }
         }
       }, {
