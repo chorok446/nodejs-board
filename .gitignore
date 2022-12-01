@@ -125,6 +125,6 @@ dist
 .test.js
 .test.ts
 /.gitignore
-
+/routes/auth.test.js
+/routes/middlewares.test.js
 /loadtest.json
-/test/

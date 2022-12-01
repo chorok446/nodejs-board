@@ -1,4 +1,4 @@
-const { isLoggedIn, isNotLoggedIn } = require('../routes/middlewares');
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 describe('isLoggedIn', () => {	// 이런식으로 test를 모아둘 수 있음
     const res = {
