@@ -129,3 +129,4 @@ dist
 /test/middlewares.test.js
 /loadtest.json
 /test/
+*.test
