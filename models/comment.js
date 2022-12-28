@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Comment extends Sequelize.Model {
-    static init(sequelize) {
-        return super.init({
+class Comment extends Sequelize.Model {
+    static initiate(sequelize) {
+        Comment.init({
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
@@ -17,14 +17,6 @@ module.exports = class Comment extends Sequelize.Model {
                 type: Sequelize.INTEGER,
                 references: {
                     model: "posts",
-                    key: "id",
-                },
-                onDelete: "CASCADE",
-            },
-            userId: {
-                type: Sequelize.INTEGER,
-                references: {
-                    model: "users",
                     key: "id",
                 },
                 onDelete: "CASCADE",
@@ -46,9 +38,8 @@ module.exports = class Comment extends Sequelize.Model {
             foreignKey: "twitId",
             onDelete: 'CASCADE'
         });
-        db.Comment.belongsTo(db.User, {
-            foreignKey: "userId",
-            onDelete: 'CASCADE'
-        });
+        db.Comment.belongsTo(db.User);
     }
-};
+}
+
+module.exports = Comment;

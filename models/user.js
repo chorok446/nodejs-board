@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
-module.exports = class User extends Sequelize.Model {
-    static init(sequelize) {
-        return super.init({
+class User extends Sequelize.Model {
+    static initiate(sequelize) {
+        User.init({
             email: {
                 type: Sequelize.STRING(40),
                 allowNull: true,
@@ -17,7 +17,7 @@ module.exports = class User extends Sequelize.Model {
                 allowNull: true,
             },
             provider: {
-                type: Sequelize.STRING(10),
+                type: Sequelize.ENUM('local', 'kakao', 'naver', 'google'),
                 allowNull: false,
                 defaultValue: 'local',
             },
@@ -25,16 +25,10 @@ module.exports = class User extends Sequelize.Model {
                 type: Sequelize.STRING(30),
                 allowNull: true,
             },
-            id : {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-                autoIncrement: true,
-                primaryKey: true,
-            },
             profile : {
                 type: Sequelize.STRING(200),
                 allowNull: true,
-                defaultValue: '/avata/default.jpg',
+                defaultValue: '/profiles/default.jpg',
             }
         }, {
             sequelize,
@@ -49,9 +43,8 @@ module.exports = class User extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.User.hasMany(db.Post, {
-            foreignKey: 'userId',
-        });
+        db.User.hasMany(db.Post);
+        db.User.hasMany(db.Comment);
         db.User.belongsToMany(db.User, {
             foreignKey: 'followingId',
             as: 'Followers',
@@ -70,8 +63,8 @@ module.exports = class User extends Sequelize.Model {
             through: 'Like',
         });
          */
-        db.User.hasMany(db.Comment, {
-            foreignKey: 'userId',
-        });
+
     }
-};
+}
+
+module.exports = User;

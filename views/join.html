@@ -5,20 +5,19 @@
   <form id="join-form" name="joinform" action="/auth/join" method="post" enctype="multipart/form-data">
     <div class="input-group" id="join-email-container">
       <label for="join-email">이메일</label>
-      <input id="join-email" type="email" name="email" onblur="emailtypecheck()">
+      <input id="join-email" name="email" type="email" >
     </div>
-
     <div class="input-group" id="join-password-container">
       <label for="join-password">비밀번호</label>
-      <input id="join-password" type="password" name="password" placeholder="영문자+숫자+특수문자 조합 8자리 이상" onblur="passwordtypecheck()">
+      <input id="join-password" name="password" placeholder="영문자+숫자+특수문자 조합 8자리 이상" type="password">
     </div>
     <div class="input-group" id="join-repassword-container">
       <label for="join-repassword">비밀번호확인</label>
-      <input id="join-repassword" type="password" name="repassword" onblur="repasswordtypecheck()">
+      <input id="join-repassword" name="repassword" type="password" >
     </div>
     <div class="input-group" id="join-nick-container">
       <label for="join-nick">닉네임</label>
-      <input id="join-nick" type="text" name="nick" onblur="nicktypecheck()"></div>
+      <input id="join-nick" name="nick" type="text"></div>
     <div class="avata-preview">
       <img id="avata-preview" src="" style="display: none;" width="250" alt="미리보기">
       <input id="avata-url" type="hidden" name="url">
@@ -27,21 +26,23 @@
       <label id="avata-label" for="avata">프로필 사진 업로드</label>
       <input id="avata" type="file" accept="image/*">
     </div>
+    <button class="btn" id="join-btn" type="submit">회원가입</button>
     <button type="button" onclick="history.back();" class="btn">이전페이지로 돌아가기</button>
-    <button id="join-btn" type="button" onclick="joinform_check();" class="btn">회원가입</button>
   </form>
 </div>
 {% endblock %}
 
 {% block script %}
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 <script>
+
     if (document.getElementById('avata')) {
         document.getElementById('avata').addEventListener('change', function(e) {
             const formData = new FormData();
             console.log(this, this.files);
             formData.append('avata', this.files[0]);
-            axios.post('/auth/avata', formData)
+            axios.post('/user/upload/profile', formData)
                 .then((res) => {
                     document.getElementById('avata-url').value = res.data.url;
                     document.getElementById('avata-preview').src = res.data.url;
@@ -58,6 +59,7 @@
             alert('이미 존재하는 이메일입니다.');
         }
     };
+    /*
     //joinform_check 함수로 유효성 검사
     function joinform_check() {
         //변수에 담아주기
@@ -189,7 +191,7 @@
             error.innerHTML = "";
         }
     }
-
+*/
 
 </script>
 {% endblock %}

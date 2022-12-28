@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Post extends Sequelize.Model {
-    static init(sequelize) {
-        return super.init({
+class Post extends Sequelize.Model {
+    static initiate(sequelize) {
+        Post.init({
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
@@ -17,14 +17,6 @@ module.exports = class Post extends Sequelize.Model {
                 type: Sequelize.STRING(200),
                 allowNull: true,
             },
-            userId: {
-                type: Sequelize.INTEGER,
-                references: {
-                    model: "users",
-                    key: "id",
-                },
-                onDelete: "CASCADE",
-            },
         }, {
             sequelize,
             timestamps: true,
@@ -38,13 +30,12 @@ module.exports = class Post extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.Post.belongsTo(db.User, {
-            foreignKey: "userId",
-            onDelete: 'CASCADE'
-        });
+        db.Post.belongsTo(db.User);
         db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag' });
         db.Post.hasMany(db.Comment, {
             foreignKey: 'twitId',
         })
     }
-};
+}
+
+module.exports = Post;

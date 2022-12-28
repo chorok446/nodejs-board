@@ -16,7 +16,7 @@
       {% if user and user.id %}
       <div class="user-name">{{'안녕하세요! ' + user.nick + '님'}}</div>
       <div class="userz">
-        <div class="profile-img"><img src="{{user.profile}}" alt="섬네일"></div>
+        <div class="profile-img"><img alt="유저프로파일" src="{{user.profile}}"></div>
         <a id="edit_avata_btn" href="/avata" class="btn" style="margin-top: 10px">프로필사진 변경</a>
       </div>
       <div class="half">

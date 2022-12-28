@@ -15,7 +15,7 @@
       <div>
         <label id="img-label" for="img">사진 업로드</label>
         <input id="img" type="file" accept="image/*">
-        <button id="twit-btn" type="button" onclick="boardtypecheck()" class="btn">글쓰기</button>
+        <button class="btn" id="twit-btn" type="submit">글쓰기</button>
       </div>
     </form>
   </div>
@@ -50,28 +50,30 @@
       {% endif %}
       {% for reply in replys %}
       {% if reply.twitId === twit.id %}
-      <div class="reply" >
+      <div class="reply" style="margin-top: 40px" >
         <input type="hidden" value="{{reply.User.id}}" class="reply-user-id">
         <input type="hidden" value="{{reply.id}}" class="reply-id">
+        <div style ='display: flex; align-items: center;'>
         <div class="box" style="margin-top: 10px;">
         <img alt="유저프로필" src="{{reply.User.profile}}" class="form-avata"  >
         </div>
-        <div id="reply-author">댓글 작성자: {{reply.User.nick}}</div>
-        <div id="reply-content">댓글 내용: {{reply.content}}</div>
-        <div id="reply-time"></div>
-        {% if reply.User.id == user.id %}
-        <div id="reply-delete-btn" class="btn">댓글삭제</div>
+          <div>
+            <div id="reply-author" style="font-weight: bold;">{{reply.User.nick}}</div>
+            <div id="reply-content">내용: {{reply.content}}</div>
+          </div>
+          </div>
         {% endif %}
-      </div>
+        {% if reply.User.id === user.id and reply.twitId === twit.id %}
+        <div id="reply-delete-btn" class="btn">댓글삭제</div>
       {% endif %}
       {% endfor %}
-      <div>
+      <div style="margin-top: 20px">
         <form id="reply-form" name="replyform" action="/post/comment" method="post">
           <input type="hidden" value="{{twit.id}}" name="twitid" class="twit-id">
           <div class="input-group" style="margin-top: 10px">
-            <label for="reply" style="float: left">{{user.nick}}</label>
-            <input placeholder="댓글을 작성해보세요" name="reply" id="reply" maxlength="40" style="width: 280px;"></input>
-            <button id="reply-btn" type="submit"  class="btn">댓글쓰기</button>
+            <label for="reply" style="float: left; margin-top: 20px; font-weight: bold">{{user.nick}}</label>
+            <input id="reply" maxlength="40" name="reply" placeholder="댓글을 작성해보세요" style="margin-top: 20px; width: 200px;"></input>
+            <button class="reply-btn" class="btn" style="margin-top: 20px"  type="submit">댓글쓰기</button>
           </div>
           <div>
           </div>

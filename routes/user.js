@@ -1,31 +1,47 @@
 const express = require("express");
 
-const { isLoggedIn } = require('./middlewares');
+const { isLoggedIn, isNotLoggedIn} = require('../middlewares');
 const User = require('../models/user');
 const bcrypt = require("bcrypt");
-const {addFollowing} = require("../controllers/user");
+const {addFollowing, deleteFollowing, userEdit, AfterUploadProfile, profileEdit, AfterEditedProfile} = require("../controllers/user");
+const multer = require("multer");
+const path = require("path");
+const {uploadPost} = require("../controllers/post");
+const upload2 = multer();
 
 const router = express.Router();
 
-router.post('/:id/follow', isLoggedIn, addFollowing );
-
-
-/* 팔로잉 끊기 기능 */
-router.post('/:id/unfollow', isLoggedIn, async (req, res, next) => {
-    try {
-        const user = await User.findOne({where: {id: req.params.id}});
-        if (user) { //데이터베이스에서 찾은 사용자가 있다면
-            await user.removeFollower(parseInt(req.user.id)); //팔로잉 끊기
-            res.send('언팔로우 성공');
-        } else {
-            res.status(404).send('언팔로우 할려는 유저가 존재하지 않습니다');
-        }
-    }catch (error) {
-            console.error(error);
-            next(error);
-    }
+const upload = multer({
+    storage: multer.diskStorage({
+        destination(req, file, cb) {
+            cb(null, 'profiles/');
+        },
+        filename(req, file, cb) {
+            // const ext = path.extname(file.originalname);
+            cb(null,new Date().valueOf() + path.extname(file.originalname));
+        },
+    }),
+    limits: { fileSize: 5 * 1024 * 1024 }, // 파일사이즈 5mb 해상도 및  제한
 });
 
+
+
+
+/* 팔로잉 기능 */
+router.post('/:id/follow', isLoggedIn, addFollowing );
+
+/* 팔로잉 끊기 기능 */
+router.post('/:id/unfollow', isLoggedIn, deleteFollowing);
+
+/* 닉네임, 비밀번호 수정*/
+router.post('/edit', isLoggedIn, upload2.none(),userEdit);
+
+/* 아바타 업로드 */
+router.post('/upload/profile', isNotLoggedIn, upload.single('avata'), AfterUploadProfile);
+
+
+/* 프로필 수정*/
+router.post('/edit/profile', isLoggedIn, upload.single('avata-edit'), AfterEditedProfile);
 
 
 
