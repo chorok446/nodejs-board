@@ -3,18 +3,18 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag, Comment } = require('../models');
-const { isLoggedIn } = require('./middlewares');
-const User = require("../models/user");
 
+const { isLoggedIn } = require('../middlewares');
+const {deleteTwit, uploadComment, uploadPost, deleteComment, afterUploadImage} = require("../controllers/post");
 const router = express.Router();
+
 
 try {
     fs.readdirSync('uploads');
 } catch (error) {
     console.error('uploads 폴더가 없어 uploads 폴더를 생성합니다.');
-    fs.mkdirSync('uploads');
-}
+    fs.mkdirSync('uploads');}
+
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -29,81 +29,23 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
-    console.log(req.file);
-    res.json({ url: `/img/${req.file.filename}` });
-});
-
 const upload2 = multer();
-router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
-    try {
-        const post = await Post.create({
-            content: req.body.content,
-            img: req.body.url,
-            userId: req.user.id,
-        });
-        const hashtags = req.body.content.match(/#[^\s#]*/g);
-        if (hashtags) {
-            const result = await Promise.all(
-                hashtags.map(tag => {
-                    return Hashtag.findOrCreate({
-                        where: { title: tag.slice(1).toLowerCase() },
-                    })
-                }),
-            );
-            await post.addHashtags(result.map(r => r[0]));
-        }
-        res.redirect('/');
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-});
 
-router.post('/comment', isLoggedIn, async(req, res, next) => {
-    try{
-        console.log(req.body)
-        const comment = await Comment.create( {
-            content: req.body.reply,
-            twitId: req.body.twitid,
-            userId: req.user.id,
-        })
-        res.redirect('/');
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-})
 
-router.post(`/twit/:twit/delete`, isLoggedIn, async(req, res, next) => {
-    try {
-        const twit = await Post.findOne({where: {id: req.params.twit}});
-        if (twit) {
-            await twit.destroy();
-            res.send('success');
-        } else {
-            res.status(404).send('삭제하려는 댓글이 존재하지 않습니다.');
-        }
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-})
+/* 이미지 업로드*/
+router.post('/img', isLoggedIn, upload.single('img'), afterUploadImage);
 
-router.post(`/comment/:comment/delete`, isLoggedIn, async(req, res, next) => {
-    try {
-        const comment = await Comment.findOne({where: {id: req.params.comment}});
-        if (comment) {
-            await comment.destroy();
-            res.send('success');
-        } else {
-            res.status(404).send('삭제하려는 댓글이 존재하지 않습니다.');
-        }
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-})
+/* 글 작성 */
+router.post('/', isLoggedIn, upload2.none(), uploadPost);
+
+/* 댓글 작성 */
+router.post('/comment', isLoggedIn, uploadComment)
+
+/* 글 삭제 */
+router.post(`/twit/:twit/delete`, isLoggedIn, deleteTwit )
+
+/* 댓글 삭제*/
+router.post(`/comment/:comment/delete`, isLoggedIn, deleteComment)
 
 
 

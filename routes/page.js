@@ -1,8 +1,7 @@
 const express = require('express');
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const { isLoggedIn, isNotLoggedIn } = require('../middlewares');
 const { Post, User, Hashtag, Comment } = require('../models');
-const {where} = require("sequelize");
-
+const {renderMain,renderMypage,renderJoin,renderProfileEdit,renderEditUser, renderHashtag } = require('../controllers/page');
 const router = express.Router();
 
 
@@ -16,88 +15,23 @@ router.use((req, res, next) => {
 });
 
 
-router.get('/mypage', isLoggedIn, (req, res) => {
-    res.render('mypage', { title: '내 정보 - NodeBird' });
-});
+/* 마이페이지 */
+router.get('/mypage', isLoggedIn, renderMypage);
 
-router.get('/join', isNotLoggedIn, (req, res) => {
-    res.render('join', { title: '회원가입 - NodeBird' });
-});
+/* 회원가입 페이지 */
+router.get('/join', isNotLoggedIn, renderJoin);
 
-router.get('/edit', isLoggedIn, async(req, res, next) => {
-    try {
-        exUser = await User.findOne({where: req.user.id});
-        //if(exUser.provider === "local"){
-            res.render('edit', { title : '프로필수정 - NodeBird'});
-        //} else {
-            //res.redirect('/avata');
-        //}
-    } catch (error) {
-        console.error(error);
-        next(error)
-    }
-})
+/* 닉네임, 비밀번호 변경페이지 */
+router.get('/edit', isLoggedIn, renderEditUser);
 
+/* 프로필 이미지 수정 */
+router.get('/avata', isLoggedIn, renderProfileEdit);
 
-router.get('/avata', isLoggedIn, async(req, res, next) => {
-    res.render('avata', {title: '프로필사진 변경 - NodeBird'})
-})
+/* 메인 페이지*/
+router.get('/', renderMain);
 
-
-router.get('/', async (req, res, next) => {
-    try {
-        const posts = await Post.findAll({
-            include: {
-                model: User,
-                attributes: ['id', 'nick', 'profile'],
-            },
-            order: [['createdAt', 'DESC']],
-        });
-        const comments = await Comment.findAll({
-            include: {
-                model: User,
-                attributes: ['id', 'nick', 'profile'],
-            },
-            order: [['createdAt', 'ASC']],
-        });
-        if(req.user){
-            res.render('main', {
-                title: 'NodeBird',
-                twits: posts,
-                replys: comments,
-            });
-        } else {
-            res.render('main', {
-                title: 'NodeBird',
-            });
-        }
-    } catch (err) {
-        console.error(err);
-        next(err);
-    }
-});
-
-router.get('/hashtag', async (req, res, next) => {
-    const query = req.query.hashtag;
-    if (!query) {
-        return res.redirect('/');
-    }
-    try {
-        const hashtag = await Hashtag.findOne({ where: { title: query } });
-        let posts = [];
-        if (hashtag) {
-            posts = await hashtag.getPosts({ include: [{ model: User }] });
-        }
-
-        return res.render('main', {
-            title: `${query} | NodeBird`,
-            twits: posts,
-        });
-    } catch (error) {
-        console.error(error);
-        return next(error);
-    }
-});
+/* 해쉬태그 검색기능 */
+router.get('/hashtag', renderHashtag);
 
 
 

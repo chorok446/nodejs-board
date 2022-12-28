@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Hashtag extends Sequelize.Model {
-    static init(sequelize) {
-        return super.init({
+class Hashtag extends Sequelize.Model {
+    static initiate(sequelize) {
+        Hashtag.init({
             title: {
                 type: Sequelize.STRING(15),
                 allowNull: false,
@@ -24,3 +24,5 @@ module.exports = class Hashtag extends Sequelize.Model {
         db.Hashtag.belongsToMany(db.Post, { through: 'PostHashtag' });
     }
 };
+
+module.exports = Hashtag

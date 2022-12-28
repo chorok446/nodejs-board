@@ -2,15 +2,23 @@
 
 {% block content %}
 <div class="timeline">
-  <form id="edit-form" name="editform" action="/auth/edit" method="post">
+  <form action="/user/edit" id="edit-form" method="POST" name="editform">
+    <div class="avata-edit-preview">
+      <img alt="미리보기" id="avata-edit-preview" src="" style="display: none;" width="250">
+      <input id="avata-edit-url" name="url" type="hidden">
+    </div>
+    <div class="input-group">
+      <label for="avata-edit" id="avata-edit-label">프로필 사진 변경</label>
+      <input accept="image/*" id="avata-edit" type="file">
+    </div>
+    <div class="edit-img-preview">
+      <img alt="미리보기" id="edit-img-preview" src="" style="display: none;" width="250">
+      <input id="edit-img-url" name="edittedurl" type="hidden">
+    </div>
     {% if user and user.provider === 'local' %}
     <div class="input-group">
       <label for="edit-password">비밀번호</label>
       <input id="edit-password" type="password" name="password" placeholder="영문자+숫자+특수문자 조합 8자리 이상">
-    </div>
-    <div class="input-group">
-      <label for="edit-repassword">비밀번호재확인</label>
-      <input id="edit-repassword" type="password" name="repassword">
     </div>
     {% endif %}
     {% if user and user.provider !== 'local' %}
@@ -82,6 +90,22 @@
       }
       //입력 값 전송
       document.editform.submit(); //유효성 검사의 포인트
+  }
+  if (document.getElementById('avata-edit')) {
+    document.getElementById('avata-edit').addEventListener('change', function(e) {
+      const formData = new FormData();
+      console.log(this, this.files);
+      formData.append('avata-edit', this.files[0]);
+      axios.post('/user/edit/profile', formData)
+              .then((res) => {
+                document.getElementById('avata-edit-url').value = res.data.url;
+                document.getElementById('avata-edit-preview').src = res.data.url;
+                document.getElementById('avata-edit-preview').style.display = 'inline';
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+    });
   }
 </script>
 {% endblock %}
